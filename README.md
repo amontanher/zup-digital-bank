@@ -1,1 +1,0 @@
-# zup-digital-bank
