@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import zup.digitalBank.models.CustomerAddress;
 import zup.digitalBank.models.CustomerPersonalDetail;
 import zup.digitalBank.services.ProposalService;
 
@@ -34,5 +35,10 @@ public class ProposalController {
         }else{
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(customerpersonalDetail);
         }
+    }
+
+    @PostMapping("/ale")
+    public ResponseEntity<CustomerAddress> createAle(@Valid @RequestBody CustomerAddress customerAddress){
+        return new ResponseEntity(HttpStatus.SERVICE_UNAVAILABLE);
     }
 }
