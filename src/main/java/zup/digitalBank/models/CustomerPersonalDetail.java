@@ -4,11 +4,18 @@ import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.format.annotation.DateTimeFormat;
 import zup.digitalBank.validation.Age;
 
+import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
 
+@Entity
+@Table(name = "CustomerPersonalDetail")
 @Age
 public class CustomerPersonalDetail {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+
     @NotNull(message = "Customer Name cannot be null")
     private String name;
 
