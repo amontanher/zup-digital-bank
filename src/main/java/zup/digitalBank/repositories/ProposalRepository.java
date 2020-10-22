@@ -45,4 +45,14 @@ public class ProposalRepository{
             return proposal;
         }
     }
+
+    public boolean checkIfPreviousProposalStepIsOk(String proposalId, int proposalStep) throws SQLException {
+        final String sql = "SELECT COUNT(ProposalStep) FROM Proposal WHERE Id = ? AND ProposalStep = ?";
+
+        try(Connection connection = DBFactory.getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(sql)){
+            return rs.getInt("ProposalStep") == 1;
+        }
+    }
 }

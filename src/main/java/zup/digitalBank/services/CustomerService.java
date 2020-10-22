@@ -17,15 +17,18 @@ public class CustomerService {
         customerRepository = new CustomerRepository();
     }
 
-    public boolean createCustomerAddress(CustomerAddress customerAddress)throws SQLException {
+    public void createCustomerAddress(CustomerAddress customerAddress, UUID customerId)throws SQLException {
         try{
-            customerAddress.setId(UUID.randomUUID());
+            UUID customerAddressId = UUID.randomUUID();
+            customerAddress.setId(customerAddressId);
+
             customerRepository.createCustomerAddress(customerAddress);
 
-
-            return true;
+            Customer customerToUpdate = customerRepository.getCustomer(customerId);
+            customerToUpdate.setCustomerAddressId(customerAddressId);
+            customerRepository.updateCustomer(customerToUpdate);
         }catch (SQLException exception){
-            return false;
+            throw  exception;
         }
     }
 
