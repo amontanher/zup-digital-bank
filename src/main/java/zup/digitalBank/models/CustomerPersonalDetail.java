@@ -6,23 +6,24 @@ import zup.digitalBank.validation.Age;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.sql.Date;
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Entity
 @Table(name = "CustomerPersonalDetail")
 @Age
 public class CustomerPersonalDetail {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private UUID id;
 
-    @NotNull(message = "Customer Name cannot be null")
+    @NotBlank(message = "Customer Name cannot be blank")
     private String name;
 
-    @NotNull(message = "Customer Surname cannot be null")
+    @NotBlank(message = "Customer Surname cannot be blank")
     private String surname;
 
-    @NotNull(message = "Customer Email cannot be null")
+    @NotBlank(message = "Customer Email cannot be blank")
     @Email
     private String email;
 
@@ -31,9 +32,17 @@ public class CustomerPersonalDetail {
     @Past
     private LocalDate birthDate;
 
-    @NotNull(message = "Customer CPF cannot be null")
+    @NotBlank(message = "Customer CPF cannot be blank")
     @CPF
     private String cpf;
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

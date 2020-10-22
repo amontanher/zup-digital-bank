@@ -2,10 +2,17 @@ package zup.digitalBank.models;
 
 import zup.digitalBank.validation.CEP;
 
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.UUID;
 
+@Entity
+@Table(name="CustomerAddress")
 public class CustomerAddress {
+
+    @Id
+    private UUID id;
 
     @NotBlank(message = "Customer CEP cannot be blank")
     @CEP
@@ -77,5 +84,13 @@ public class CustomerAddress {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 }
