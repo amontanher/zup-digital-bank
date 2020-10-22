@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import zup.digitalBank.models.CustomerAddress;
 import zup.digitalBank.models.CustomerPersonalDetail;
 import zup.digitalBank.models.Proposal;
+import zup.digitalBank.models.ProposalStep;
 import zup.digitalBank.services.CustomerService;
 import zup.digitalBank.services.ProposalService;
 
@@ -34,7 +35,7 @@ public class ProposalController {
         Proposal proposalCreated = proposalService.createInitProposal(customerpersonalDetail);
 
         if(proposalCreated != null){
-            String uri = String.format("http://localhost:8080/proposal/2/%s",proposalCreated.getId());
+            String uri = String.format("http://localhost:8080/proposal/2/%s/address",proposalCreated.getId());
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.setLocation(new URI(uri));
             return new ResponseEntity(responseHeaders, HttpStatus.CREATED);
@@ -43,20 +44,21 @@ public class ProposalController {
         }
     }
 
-    @RequestMapping("/{id}/{proposalId}")
-    public ResponseEntity<CustomerAddress> createAle(@Valid @RequestBody CustomerAddress customerAddress,
-                                                     @PathVariable("id") String id,
-                                                     @PathVariable("proposalId") String proposalId) throws SQLException, URISyntaxException {
-        Proposal customerProposal = proposalService.getProposal(UUID.fromString(proposalId));
-        boolean customerAddressCreated = customerService.createCustomerAddress(customerAddress);
+    @RequestMapping("/{proposalStepId}/{proposalId}/address")
+    public ResponseEntity<CustomerAddress> createCustomerAddress(@Valid @RequestBody CustomerAddress customerAddress,
+                                                                 @PathVariable("proposalStepId") Integer proposalStepId,
+                                                                 @PathVariable("proposalId") String proposalId)
+            throws SQLException, URISyntaxException {
 
-        if(customerAddressCreated){
-            String uri = String.format("http://localhost:8080/proposal/3/%s",proposalId);
-            HttpHeaders responseHeaders = new HttpHeaders();
-            responseHeaders.setLocation(new URI(uri));
-            return new ResponseEntity(responseHeaders, HttpStatus.CREATED);
-        }else{
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(customerAddress);
-        }
+        ProposalStep proposalStep = ProposalStep.values()[proposalStepId-1];
+
+        return proposalService.createProposalAddress(customerAddress, proposalId, proposalStep);
+    }
+
+    @RequestMapping("/{proposalStepId}/{proposalId}/document")
+    public ResponseEntity<CustomerAddress> createCustomerDocumentImage(@Valid @RequestBody CustomerAddress customerAddress,
+                                                                       @PathVariable("proposalStepId") Integer proposalStepId,
+                                                                       @PathVariable("proposalId") String proposalId) throws SQLException, URISyntaxException {
+        return new ResponseEntity(HttpStatus.CREATED);
     }
 }
