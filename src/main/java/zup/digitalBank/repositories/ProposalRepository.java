@@ -5,9 +5,9 @@ import zup.digitalBank.database.DBFactory;
 import zup.digitalBank.models.Customer;
 import zup.digitalBank.models.Proposal;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import javax.xml.transform.Result;
+import java.sql.*;
+import java.util.UUID;
 
 @Repository
 public class ProposalRepository{
@@ -26,6 +26,23 @@ public class ProposalRepository{
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             DBFactory.printSQLException(e);
+        }
+    }
+
+    public Proposal getProposal(UUID proposalId) throws SQLException {
+        Proposal proposal = new Proposal();
+
+        final String sql = "SELECT * FROM Proposal WHERE Id = ?";
+
+        try(Connection connection = DBFactory.getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(sql)){
+
+            proposal.setId((UUID) rs.getObject("id"));
+            proposal.setCustomerId((UUID) rs.getObject("customerId"));
+            proposal.setProposalStep(rs.getInt("proposalStep"));
+            proposal.setProposalStepDateConcluded(rs.getDate("proposalStepDateConcluded").toLocalDate());
+            return proposal;
         }
     }
 }

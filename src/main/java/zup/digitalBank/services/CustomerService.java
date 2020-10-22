@@ -21,6 +21,8 @@ public class CustomerService {
         try{
             customerAddress.setId(UUID.randomUUID());
             customerRepository.createCustomerAddress(customerAddress);
+
+
             return true;
         }catch (SQLException exception){
             return false;
@@ -43,5 +45,9 @@ public class CustomerService {
 
     public void updateCustomer(Customer customer){
         customerRepository.updateCustomer(customer);
+    }
+
+    public Customer getCustomer(UUID customerId){
+        return customerRepository.getCustomer(customerId);
     }
 }

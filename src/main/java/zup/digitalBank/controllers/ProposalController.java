@@ -47,6 +47,7 @@ public class ProposalController {
     public ResponseEntity<CustomerAddress> createAle(@Valid @RequestBody CustomerAddress customerAddress,
                                                      @PathVariable("id") String id,
                                                      @PathVariable("proposalId") String proposalId) throws SQLException, URISyntaxException {
+        Proposal customerProposal = proposalService.getProposal(UUID.fromString(proposalId));
         boolean customerAddressCreated = customerService.createCustomerAddress(customerAddress);
 
         if(customerAddressCreated){

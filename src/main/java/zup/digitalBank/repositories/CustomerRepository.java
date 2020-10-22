@@ -5,11 +5,11 @@ import zup.digitalBank.database.DBFactory;
 import zup.digitalBank.models.Customer;
 import zup.digitalBank.models.CustomerAddress;
 import zup.digitalBank.models.CustomerPersonalDetail;
+import zup.digitalBank.models.Proposal;
 
-import java.sql.SQLException;
+import java.sql.*;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
+import java.util.UUID;
 
 @Repository
 public class CustomerRepository{
@@ -83,5 +83,23 @@ public class CustomerRepository{
         } catch (SQLException e) {
             DBFactory.printSQLException(e);
         }
+    }
+
+    public Customer getCustomer(UUID customerId) {
+        Customer customer = new Customer();
+
+        final String sql = "SELECT * FROM Customer WHERE Id = ?";
+
+        try(Connection connection = DBFactory.getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(sql)){
+
+            customer.setId((UUID) rs.getObject("id"));
+            customer.setCustomerAddressId((UUID) rs.getObject("CustomerAddressId"));
+            customer.setCustomerPersonalDetailId((UUID) rs.getObject("CustomerPersonalDetailId"));
+        } catch (SQLException e) {
+            DBFactory.printSQLException(e);
+        }
+        return customer;
     }
 }

@@ -59,4 +59,8 @@ public class ProposalService {
 
         return proposal;
     }
+
+    public Proposal getProposal(UUID proposalId) throws SQLException {
+        return proposalRepository.getProposal(proposalId);
+    }
 }
